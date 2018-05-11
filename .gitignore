@@ -1,2 +1,8 @@
 *.class
 *.log
+logs/
+.idea
+target/
+.history
+.cache
+.lib/
