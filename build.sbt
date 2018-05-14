@@ -1,15 +1,16 @@
-
 name := "scala-util"
 
-version := "0.1"
-
-scalaVersion := "2.12.6"
-
-libraryDependencies ++= Seq(
-  // https://mvnrepository.com/artifact/org.scala-lang/scala-reflect
-  "org.scala-lang" % "scala-reflect" % "2.12.6",
-  // https://mvnrepository.com/artifact/com.google.guava/guava
-  "com.google.guava" % "guava" % "24.1-jre",
-  // https://mvnrepository.com/artifact/org.reflections/reflections
-  "org.reflections" % "reflections" % "0.9.11"
+lazy val commonSetting = Seq(
+  version := "1.0-SNAPSHOT",
+  scalaVersion := CommonConf.scalaV
 )
+
+libraryDependencies ++= CommonConf.commonDependencies
+
+resolvers += Resolver.sonatypeRepo("snapshots")
+
+lazy val util = (project in file("modules/util")).settings(commonSetting)
+
+lazy val akka = (project in file("modules/akka")).settings(commonSetting).dependsOn(util)
+
+lazy val root = (project in file(".")).aggregate(util, akka).dependsOn(util, akka)

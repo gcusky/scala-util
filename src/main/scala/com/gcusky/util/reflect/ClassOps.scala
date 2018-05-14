@@ -8,11 +8,18 @@ import scala.collection.JavaConverters._
 case class ClassOps[T](underlying: Class[T]) {
 
   /**
-    * 获取所有的子类（不包括抽象类/接口）
+    * 获取所有的子类型（不包括抽象类/接口）
     */
-  def subTypes: List[Class[_ <: T]] = {
+  def subTypes: Seq[Class[_ <: T]] = {
     val subTypes = reflection.getSubTypesOf(underlying).asScala // 扫描
     subTypes.view.filterNot(c => c.getModifiers.isAbstract).toList
+  }
+
+  /**
+    * 获取所有的子类型（包括抽象类/接口）
+    */
+  def allSubTypes: Seq[Class[_ <: T]] = {
+    reflection.getSubTypesOf(underlying).asScala.toList
   }
 
   @throws[IllegalStateException]("if not singleton object")
@@ -28,4 +35,12 @@ case class ClassOps[T](underlying: Class[T]) {
     */
   def subSingletons: Seq[T] = subTypes.view.filterNot(c => c.isLocalClass || c.isAnonymousClass || c.isMemberClass).map(_.singleton).toList
 
+  /**
+    * 获取伴生对象
+    */
+  def companion: T = {
+    val mirror = scala.reflect.runtime.universe.runtimeMirror(underlying.getClassLoader)
+    val module = mirror.classSymbol(underlying).companion.asModule
+    mirror.reflectModule(module).instance.asInstanceOf[T]
+  }
 }

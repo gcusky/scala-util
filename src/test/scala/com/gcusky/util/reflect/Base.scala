@@ -25,6 +25,9 @@ object C extends Base {
 //}
 
 object Base extends App {
+
+  val sub1 = classOf[Base].subSingletons.map(_.x)
+  println(sub1)
   val sub2 = subObject(classOf[Base]).map(_.x)
   println(sub2)
 

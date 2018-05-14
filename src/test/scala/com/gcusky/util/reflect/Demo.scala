@@ -1,7 +1,4 @@
-package com.gcusky.util.tets
-
-import org.reflections.Reflections
-import scala.collection.JavaConverters._
+package com.gcusky.util.reflect
 
 /**
   * Created by lizhy on 2018/5/2.
@@ -29,7 +26,7 @@ object Demo extends App {
 //      sub.getField("MODULE$").get(null).asInstanceOf[T]
 //    }.toSeq
 //  }
-  val heirenwenhao = scala.reflect.runtime.universe.typeOf[Demo].typeSymbol.asClass.knownDirectSubclasses
+//  val heirenwenhao = scala.reflect.runtime.universe.typeOf[Demo].typeSymbol.asClass.knownDirectSubclasses
 
   val test1 = subObject1(classOf[Demo]).map(_.x)
 //  val test2 = subObject1(classOf[Demo]).map(_.x)
@@ -41,15 +38,15 @@ sealed trait Demo {
   val x: Int
 }
 
-object A extends Demo {
+object A1 extends Demo {
   override val x: Int = 1
 
 }
 
-object B extends Demo {
+object B1 extends Demo {
   override val x: Int = 2
 }
 
-object C extends Demo {
+object C1 extends Demo {
   override val x: Int = 3
 }
